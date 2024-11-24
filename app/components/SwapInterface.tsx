@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
 import Metrics from "./Metrices"
 import Modal from "./Modal";
 import { connectWallet, fetchTokenBalance } from "../../services/WalletService";

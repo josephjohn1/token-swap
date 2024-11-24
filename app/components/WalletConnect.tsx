@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
 
 const WalletConnect = () => {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
