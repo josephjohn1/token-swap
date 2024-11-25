@@ -16,18 +16,45 @@ export const connectWallet = async () => {
 
 export const fetchTokenBalance = async (address: string, tokenAddress: string) => {
   try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const tokenContract = new ethers.Contract(
-      tokenAddress,
-      [
-        "function balanceOf(address owner) view returns (uint256)",
-        "function decimals() view returns (uint8)",
+    if (!window.ethereum) {
+      throw new Error("MetaMask is required to fetch the token balance.");
+    }
+
+    // Define ERC-20 function signatures
+    const balanceOfSignature = "0x70a08231"; // balanceOf(address)
+    const decimalsSignature = "0x313ce567"; // decimals()
+
+    // Encode address for balanceOf call
+    const balanceOfData = `${balanceOfSignature}${address.slice(2).padStart(64, "0")}`;
+
+    // Fetch balance
+    const balance = await window.ethereum.request({
+      method: "eth_call",
+      params: [
+        {
+          to: tokenAddress,
+          data: balanceOfData,
+        },
+        "latest",
       ],
-      provider
-    );
-    const balance = await tokenContract.balanceOf(address);
-    const decimals = await tokenContract.decimals();
-    return ethers.utils.formatUnits(balance, decimals);
+    });
+
+    // Fetch decimals
+    const decimals = await window.ethereum.request({
+      method: "eth_call",
+      params: [
+        {
+          to: tokenAddress,
+          data: decimalsSignature,
+        },
+        "latest",
+      ],
+    });
+
+    // Convert the values to readable numbers
+    const balanceValue = parseInt(balance, 16) / 10 ** parseInt(decimals, 16);
+
+    return balanceValue.toString();
   } catch (error) {
     console.error("Error fetching token balance:", error);
     return "0.0";
