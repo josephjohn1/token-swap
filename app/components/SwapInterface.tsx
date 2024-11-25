@@ -164,7 +164,7 @@ const SwapInterface = () => {
           outputAmount,
           fees: (parseFloat(inputAmount) * 0.005).toFixed(4), // Mock fee
           slippage: (Math.random() * 0.5).toFixed(2), // Mock slippage
-          status: transactionStatus,
+          status: transactionStatus ?? undefined,
         }}
       />
     </div>
