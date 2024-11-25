@@ -19,9 +19,9 @@ const Metrics = ({
     if (inputAmount) {
       // Mock calculations for metrics
       const amount = parseFloat(inputAmount) || 0;
-      setPriceImpact((Math.random() * 2).toFixed(2)); // Random % price impact
-      setFees((amount * 0.005).toFixed(4)); // Assume 0.5% fee
-      setSlippage((Math.random() * 0.5).toFixed(2)); // Random slippage between 0-0.5%
+      setPriceImpact(parseFloat((Math.random() * 2).toFixed(2))); // Convert to number
+      setFees(parseFloat((amount * 0.005).toFixed(4))); // Convert to number
+      setSlippage(parseFloat((Math.random() * 0.5).toFixed(2))); // Convert to number      
     }
   }, [inputAmount, inputToken, outputToken]);
 
